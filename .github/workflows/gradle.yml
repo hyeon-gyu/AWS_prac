@@ -66,7 +66,7 @@ jobs:
       uses: appleboy/ssh-action@v0.1.6
       id: deploy-prod
       env:
-        COMPOSE: "/home/ubuntu/docker-compose.yml"
+        COMPOSE: /home/ubuntu/docker-compose.yml
       with:
         host: ${{ secrets.EC2_HOST_PROD }}
         username: ${{ secrets.EC2_USERNAME }}
@@ -75,8 +75,8 @@ jobs:
         envs: GITHUB_SHA, COMPOSE
         script: |
 
-          docker rm -f $(docker ps -aq) || true
-          docker-compose -f $COMPOSE down -d || true
+          docker ps -aq | xargs -r docker rm -f
+          docker-compose -f $COMPOSE down || true
           docker pull ${{ secrets.DOCKER_REPO }}  
         
           docker-compose -f $COMPOSE up -d
