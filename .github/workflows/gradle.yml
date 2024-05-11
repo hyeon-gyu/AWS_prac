@@ -74,10 +74,9 @@ jobs:
         port: 22
         envs: GITHUB_SHA, COMPOSE
         script: |
-
-          docker ps -aq | xargs -r docker rm -f
-          docker-compose -f $COMPOSE down || true
-          docker pull ${{ secrets.DOCKER_REPO }}  
-        
-          docker-compose -f $COMPOSE up -d
+          docker pull ${{ secrets.DOCKER_REPO }} 
+          docker stop javaServer || true
+          docker rm javaServer || true
+          docker run -d --name javaServer -p 8080:8080 ${{ secrets.DOCKER_REPO }}
+ 
           docker image prune -f
