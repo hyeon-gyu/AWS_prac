@@ -76,8 +76,6 @@ jobs:
           sudo docker rm $(sudo docker ps -a)
           sudo docker pull ${{ secrets.DOCKER_REPO }}  
 
-          # Docker 컨테이너 실행
-          sudo docker run -d --name aws_test -p 8080:8080 -e "SPRING_PROFILES_ACTIVE=prod" ${{ secrets.DOCKER_REPO }}
           cd ~
           docker-compose up -d
           sudo docker image prune -f
