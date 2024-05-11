@@ -66,18 +66,18 @@ jobs:
       uses: appleboy/ssh-action@v0.1.6
       id: deploy-prod
       env:
-        PATH: /home/ubuntu/docker-compose.yml"
+        COMPOSE: /home/ubuntu/docker-compose.yml"
       with:
         host: ${{ secrets.EC2_HOST_PROD }}
         username: ${{ secrets.EC2_USERNAME }}
         key: ${{ secrets.EC2_PRIVATE_KEY }}
         port: 22
-        envs: GITHUB_SHA, PATH
+        envs: GITHUB_SHA, COMPOSE
         script: |
 
           docker rm -f $(docker ps -aq) || true
-          docker-compose -f $PATH down -d || true
+          docker-compose -f $COMPOSE down -d || true
           docker pull ${{ secrets.DOCKER_REPO }}  
         
-          docker-compose -f $PATH up -d
+          docker-compose -f $COMPOSE up -d
           docker image prune -f
