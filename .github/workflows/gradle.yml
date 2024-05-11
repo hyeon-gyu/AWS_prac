@@ -65,6 +65,9 @@ jobs:
     - name: Deploy to prod
       uses: appleboy/ssh-action@v0.1.6
       id: deploy-prod
+      env:
+        APP: "docker-compose"
+        COMPOSE: "/home/ubuntu/docker-compose.yml"
       with:
         host: ${{ secrets.EC2_HOST_PROD }}
         username: ${{ secrets.EC2_USERNAME }}
@@ -76,6 +79,5 @@ jobs:
           sudo docker rm $(sudo docker ps -a)
           sudo docker pull ${{ secrets.DOCKER_REPO }}  
 
-          cd ~
-          docker-compose up -d
+          docker-compose up -f $COMPOSE -d
           sudo docker image prune -f
