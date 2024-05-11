@@ -76,8 +76,8 @@ jobs:
         script: |
 
           docker rm -f $(docker ps -aq) || true
-          docker-compose -f PATH down -d || true
+          docker-compose -f $PATH down -d || true
           docker pull ${{ secrets.DOCKER_REPO }}  
         
-          docker-compose -f PATH up -d
+          docker-compose -f $PATH up -d
           docker image prune -f
